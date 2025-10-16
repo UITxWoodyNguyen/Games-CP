@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hanoi Tower - Trang chủ</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <a href="spin.html" class="top-right-button">🎡 Vòng quay may mắn </a>
+    <div class="container">
+        <h1 class="title">[HẠ VŨ 22] - Hanoi Tower</h1>
+
+        <form class="player-form" action="game.html" method="GET">
+            <div class="rules-section">
+                <h2>📜 Luật chơi Tháp Hà Nội</h2>
+                <ul>
+                    <li>🪄 Có 3 cọc và nhiều đĩa với kích thước khác nhau.</li>
+                    <li>🎯 Mục tiêu: chuyển toàn bộ đĩa sang cọc khác theo đúng thứ tự (lớn dưới, nhỏ trên).</li>
+                    <li>🚫 Chỉ được di chuyển <strong>1 đĩa mỗi lần</strong>.</li>
+                    <li>❗ Không được đặt <strong>đĩa lớn lên trên đĩa nhỏ</strong>.</li>
+                </ul>
+            </div>
+
+            <input type="text" name="player" placeholder="Bạn đến từ lớp nào" required />
+
+            <label for="discs">Chọn số đĩa:</label>
+            <select name="discs" id="discs">
+                <option value="3">3 đĩa</option>
+                <option value="4">4 đĩa</option>
+                <option value="5">5 đĩa</option>
+                <option value="6">6 đĩa</option>
+                <option value="7">7 đĩa</option>
+                <option value="8">8 đĩa</option>
+            </select>
+
+            <button type="submit">Bắt đầu chơi</button>
+        </form>
+    </div>
+
+    <script>
+        // Kiểm tra nếu có kết quả quay từ trang spin
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectedDiscs = localStorage.getItem('selectedDiscs');
+            if (selectedDiscs) {
+                const discsSelect = document.getElementById('discs');
+                discsSelect.value = selectedDiscs;
+                localStorage.removeItem('selectedDiscs'); // Xóa để lần sau không tự động chọn lại
+
+                // Hiển thị thông báo
+                alert(`Số đĩa đã được chọn: ${selectedDiscs} (từ vòng quay)`);
+            }
+        });
+    </script>
+</body>
+
+</html>

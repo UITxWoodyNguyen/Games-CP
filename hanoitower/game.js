@@ -1,0 +1,186 @@
+let towers;
+let selectedDisc = null;
+let moveCount = 0;
+let discCount = 3;
+let maxMoves = 0;
+let timerInterval;
+let timeLeft = 300;
+let gameEnded = false;
+let restartUsed = false;
+
+function formatTime(seconds) {
+  const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const s = String(seconds % 60).padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+function updateTimer() {
+  if (gameEnded) return;
+  timeLeft--;
+  document.getElementById('timer').textContent = formatTime(timeLeft);
+  if (timeLeft <= 0) {
+    clearInterval(timerInterval);
+    endGame(false);
+  }
+}
+
+async function submitToGoogleForm(playerName, discCount, moves, timeUsed, result) {
+  const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe4uXLO4XKvTc1sfcivVFLzeQmArCPqsR6hf2l0ctLtQtVlCw/formResponse';
+
+  // Tên các trường trong Form (thay bằng ID thực tế)
+  const formFields = {
+    "entry.376621263": playerName,    // Thay bằng ID trường "Tên người chơi"
+    "entry.496682450": discCount,     // Thay bằng ID trường "Số đĩa"
+    "entry.364574772": moves,         // Thay bằng ID trường "Số bước"
+    "entry.1679190620": timeUsed,      // Thay bằng ID trường "Thời gian"
+    "entry.2046182108": result         // Thay bằng ID trường "Kết quả"
+  };
+
+  // Chuyển dữ liệu thành URL-encoded
+  const formData = new URLSearchParams();
+  for (const key in formFields) {
+    formData.append(key, formFields[key]);
+  }
+
+  // Gửi dữ liệu bằng fetch()
+  try {
+    await fetch(formUrl, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    console.log("Đã gửi kết quả thành công!");
+  } catch (error) {
+    console.error("Lỗi khi gửi kết quả:", error);
+  }
+}
+
+function endGame(won) {
+  gameEnded = true;
+  clearInterval(timerInterval);
+  const message = document.getElementById('message');
+  const timeUsed = 300 - timeLeft;
+  const formattedTime = formatTime(timeUsed);
+
+  if (won) {
+    message.textContent = `🎉 Bạn đã thắng với ${moveCount} bước trong ${formattedTime}!`;
+  } else if (timeLeft <= 0) {
+    message.textContent = "😢 Hết thời gian";
+  } else {
+    message.textContent = "😢 Chúc bạn may mắn lần sau";
+  }
+
+  // Gửi dữ liệu đến Google Form
+  submitToGoogleForm(
+    document.getElementById('player-name').textContent,
+    discCount,
+    moveCount,
+    formattedTime,
+    won ? "Thắng" : "Thua"
+  );
+}
+
+function checkWin() {
+  const tower1 = document.getElementById('tower-1');
+  const tower2 = document.getElementById('tower-2');
+
+  if (
+    tower1.childElementCount === discCount ||
+    tower2.childElementCount === discCount
+  ) {
+    endGame(true);
+  } else if ((maxMoves - moveCount) <= 0) {
+    endGame(false);
+  }
+}
+
+function setupDiscs() {
+  const baseTower = document.getElementById('tower-0');
+  for (let i = discCount; i >= 1; i--) {
+    const disc = document.createElement('div');
+    disc.classList.add('disc', `size-${i}`);
+    baseTower.appendChild(disc);
+  }
+}
+
+function resetGame() {
+  moveCount = 0;
+  timeLeft = 300;
+  gameEnded = false;
+  selectedDisc = null;
+
+  towers.forEach(tower => tower.innerHTML = '');
+  setupDiscs();
+
+  document.getElementById('moves').textContent = maxMoves;
+  document.getElementById('timer').textContent = formatTime(timeLeft);
+  document.getElementById('message').textContent = '';
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(updateTimer, 1000);
+}
+
+function initGame() {
+  towers = document.querySelectorAll('.tower');
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const playerClass = urlParams.get('player') || 'Không rõ';
+  discCount = Math.min(parseInt(urlParams.get('discs')) || 3, 8);
+  maxMoves = Math.pow(2, discCount) + 5;
+  document.getElementById('player-name').textContent = playerClass;
+  document.getElementById('moves').textContent = maxMoves;
+
+  setupDiscs();
+
+  towers.forEach(tower => {
+    tower.addEventListener('click', () => {
+      if (gameEnded) return;
+
+      const topDisc = tower.lastElementChild;
+
+      if (!selectedDisc && topDisc) {
+        selectedDisc = topDisc;
+        selectedDisc.style.border = '2px solid #000';
+      } else if (selectedDisc) {
+        const canPlace = !topDisc || selectedDisc.offsetWidth < topDisc.offsetWidth;
+        if (canPlace) {
+          selectedDisc.style.border = '';
+          tower.appendChild(selectedDisc);
+          moveCount++;
+
+          const movesLeft = Math.max(0, maxMoves - moveCount);
+          document.getElementById('moves').textContent = movesLeft;
+
+          checkWin();
+        } else {
+          selectedDisc.style.border = '';
+        }
+        selectedDisc = null;
+      }
+    });
+  });
+
+  document.getElementById('timer').textContent = formatTime(timeLeft);
+  timerInterval = setInterval(updateTimer, 1000);
+
+  // Sự kiện nút chơi lại
+  const restartBtn = document.getElementById('restart-btn');
+  if (restartBtn) {
+    restartBtn.addEventListener('click', () => {
+      if (restartUsed) {
+        alert("⚠️ Bạn chỉ có thể chơi lại 1 lần!");
+        return;
+      }
+
+      const confirmRestart = confirm("🔁 Bạn có chắc chắn muốn chơi lại? (Chỉ có 1 lượt)");
+      if (confirmRestart) {
+        restartUsed = true;
+        resetGame();
+      }
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initGame);

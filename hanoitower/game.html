@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hanoi Tower - Trò chơi</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="game.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <button class="back-button" onclick="window.location.href='index.html'">⬅️ Quay lại</button>
+    <div class="container">
+        <h1 class="title">[HẠ VŨ 22] - Hanoi Tower</h1>
+
+        <div class="info">
+            <p>Người chơi: <strong id="player-name">---</strong></p>
+            <p>Số bước: <span id="moves">0</span></p>
+            <p>Thời gian: <span id="timer">05:00</span></p>
+        </div>
+
+        <div class="game-area">
+            <div class="tower" id="tower-0"></div>
+            <div class="tower" id="tower-1"></div>
+            <div class="tower" id="tower-2"></div>
+        </div>
+
+        <div id="message" class="info"></div>
+    </div>
+
+    <!-- Nút chơi lại -->
+    <div style="text-align: center; margin-top: 20px;">
+        <button id="restart-btn" class="restart-button">🔁 Chơi lại</button>
+    </div>
+
+    <!-- Hộp xác nhận -->
+    <div id="confirm-restart" class="confirm-box" style="display: none;">
+        <div class="confirm-content">
+            <p>Bạn có chắc chắn muốn chơi lại không?<br />Bạn chỉ có <strong>1 lần chơi lại</strong>.</p>
+            <button id="confirm-yes" class="confirm-button">✅ Có</button>
+            <button id="confirm-no" class="confirm-button">❌ Không</button>
+        </div>
+    </div>
+</body>
+
+</html>

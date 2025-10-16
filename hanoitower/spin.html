@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vòng quay chọn số đĩa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #11151c;
+            color: #4a6bff;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #3a5bed;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .home-button:hover {
+            background-color: #5f79ea;
+        }
+
+        canvas {
+            margin-top: 60px;
+        }
+
+        #spin {
+            margin-top: 30px;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #spin:hover {
+            background-color: #ff6f8f;
+        }
+
+        #result {
+            font-size: 28px;
+            margin-top: 20px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="home-button"> 🏠 Trang chủ</a>
+
+    <h1>🎡 Vòng quay chọn số đĩa</h1>
+
+    <canvas id="wheel" width="500" height="500"></canvas>
+    <br>
+    <button id="spin">QUAY!</button>
+
+    <div id="result"></div>
+
+    <script defer src="spin.js"></script>
+</body>
+
+</html>
