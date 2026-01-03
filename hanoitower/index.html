@@ -45,13 +45,16 @@
         // Kiểm tra nếu có kết quả quay từ trang spin
         document.addEventListener('DOMContentLoaded', function () {
             const selectedDiscs = localStorage.getItem('selectedDiscs');
+            const lockSelection = localStorage.getItem('lockSelection');
+            const discsSelect = document.getElementById('discs');
             if (selectedDiscs) {
-                const discsSelect = document.getElementById('discs');
                 discsSelect.value = selectedDiscs;
                 localStorage.removeItem('selectedDiscs'); // Xóa để lần sau không tự động chọn lại
-
                 // Hiển thị thông báo
                 alert(`Số đĩa đã được chọn: ${selectedDiscs} (từ vòng quay)`);
+            }
+            if (lockSelection) {
+                discsSelect.disabled = true;
             }
         });
     </script>

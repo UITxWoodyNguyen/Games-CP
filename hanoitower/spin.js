@@ -65,7 +65,7 @@ spinBtn.onclick = function () {
             result.style.color = "#28a745";
 
             localStorage.setItem('selectedDiscs', selected);
-            // localStorage.setItem('lockSelection', 'true');
+            localStorage.setItem('lockSelection', 'true');
             setTimeout(() => {
                 window.location.href = "index.html";
             }, 2000); // Chờ 2 giây rồi chuyển trang
