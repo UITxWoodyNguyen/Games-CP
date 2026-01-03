@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <form class="player-form" action="game.html" method="GET">
+        <form class="player-form" id="player-form" action="game.html" method="GET">
             <div class="rules-section">
                 <h2>📜 Luật chơi Tháp Hà Nội</h2>
                 <ul>
@@ -74,6 +74,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+                        // Khi submit form, nếu chọn quay vòng quay thì lưu tên vào localStorage để spin.js lấy
+                        const playerForm = document.getElementById('player-form');
+                        playerForm.addEventListener('submit', function(e) {
+                            const mode = document.querySelector('input[name="choose_mode"]:checked').value;
+                            if (mode === 'spin') {
+                                const playerName = playerForm.player.value;
+                                localStorage.setItem('playerName', playerName);
+                                // Chuyển sang spin.html, không submit form
+                                e.preventDefault();
+                                window.location.href = 'spin.html';
+                            }
+                        });
             // Chuyển đổi giữa tự chọn và quay vòng quay
             const radios = document.getElementsByName('choose_mode');
             const manualBlock = document.getElementById('manual-select-block');

@@ -89,11 +89,12 @@ spinBtn.onclick = function () {
             result.textContent = `🎯 Bạn sẽ chơi với ${realSelected} đĩa!`;
             result.style.color = "#28a745";
 
-            localStorage.setItem('selectedDiscs', realSelected);
-            localStorage.setItem('lockSelection', 'true');
+            // Lấy tên người chơi từ localStorage (được lưu từ index.html trước khi chuyển sang spin)
+            let playerName = localStorage.getItem('playerName') || '';
+            // Chuyển thẳng sang game.html với tên và số đĩa
             setTimeout(() => {
-                window.location.href = "index.html";
-            }, 2000); // Chờ 2 giây rồi chuyển trang
+                window.location.href = `game.html?player=${encodeURIComponent(playerName)}&discs=${realSelected}`;
+            }, 1200); // Chờ 1.2 giây rồi chuyển trang
         }
     }
 
