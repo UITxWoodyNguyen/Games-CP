@@ -1,3 +1,74 @@
+/* Leaderboard Table */
+.leaderboard-table-wrapper {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 2rem auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(74,107,255,0.10);
+  overflow-x: auto;
+  padding: 1.5rem 1rem;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+  background: transparent;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+  padding: 0.7rem 0.5rem;
+  text-align: center;
+}
+
+.leaderboard-table th {
+  background: #4a6bff;
+  color: #fff;
+  font-weight: 700;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.leaderboard-table tr {
+  transition: background 0.2s;
+}
+
+.leaderboard-table tbody tr:nth-child(even) {
+  background: #f5f7fa;
+}
+
+.leaderboard-table tbody tr:hover {
+  background: #e3eaff;
+}
+
+.leaderboard-table td {
+  border-bottom: 1px solid #e0e6f7;
+}
+
+.leaderboard-table td.rank-1 {
+  color: #FFD700;
+  font-weight: bold;
+  font-size: 1.15em;
+}
+.leaderboard-table td.rank-2 {
+  color: #C0C0C0;
+  font-weight: bold;
+}
+.leaderboard-table td.rank-3 {
+  color: #CD7F32;
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .leaderboard-table-wrapper {
+    padding: 0.5rem 0.2rem;
+  }
+  .leaderboard-table th, .leaderboard-table td {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.2rem;
+  }
+}
 /* Font và màu sắc chung */
 :root {
   --primary-color: #4a6bff;

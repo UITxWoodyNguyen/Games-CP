@@ -16,7 +16,9 @@
 
         <div id="leaderboard" style="margin-bottom:2rem;text-align:center">
             <h2>🏆 Bảng xếp hạng</h2>
-            <div id="leaderboard-table">Đang tải...</div>
+            <div class="leaderboard-table-wrapper">
+                <div id="leaderboard-table">Đang tải...</div>
+            </div>
         </div>
 
         <form class="player-form" action="game.html" method="GET">
@@ -85,9 +87,10 @@
                         leaderboardTable.innerHTML = '<i>Chưa có dữ liệu</i>';
                         return;
                     }
-                    let html = '<table style="width:100%;max-width:500px;margin:auto;border-collapse:collapse"><thead><tr><th>Hạng</th><th>Tên</th><th>Số đĩa</th><th>Số bước</th><th>Thời gian</th></tr></thead><tbody>';
+                    let html = '<table class="leaderboard-table"><thead><tr><th>Hạng</th><th>Tên</th><th>Số đĩa</th><th>Số bước</th><th>Thời gian</th></tr></thead><tbody>';
                     top.forEach((row, i) => {
-                        html += `<tr><td>${i+1}</td><td>${row['Tên người chơi']||''}</td><td>${row['Số đĩa']||''}</td><td>${row['Số bước']||''}</td><td>${row['Thời gian']||''}</td></tr>`;
+                        let rankClass = i < 3 ? `rank-${i+1}` : '';
+                        html += `<tr><td class="${rankClass}">${i+1}</td><td>${row['Tên người chơi']||''}</td><td>${row['Số đĩa']||''}</td><td>${row['Số bước']||''}</td><td>${row['Thời gian']||''}</td></tr>`;
                     });
                     html += '</tbody></table>';
                     leaderboardTable.innerHTML = html;
