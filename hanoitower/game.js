@@ -109,9 +109,12 @@ function endGame(won) {
           } else {
             alert('Đã gửi kết quả, vui lòng tải lại trang để xem vị trí trên bảng xếp hạng!');
           }
+          // Sau khi đóng alert, trở về trang chủ
+          window.location.href = '../index.html';
         })
         .catch(() => {
           alert('Không thể kiểm tra vị trí trên bảng xếp hạng!');
+          window.location.href = '../index.html';
         });
     }, 2500); // Đợi 2.5s để Google Sheet cập nhật
   }
