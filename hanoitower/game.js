@@ -73,13 +73,48 @@ function endGame(won) {
   }
 
   // Gửi dữ liệu đến Google Form
+  const playerName = document.getElementById('player-name').textContent;
   submitToGoogleForm(
-    document.getElementById('player-name').textContent,
+    playerName,
     discCount,
     moveCount,
     formattedTime,
     won ? "Thắng" : "Thua"
   );
+
+  // Nếu thắng, sau 2-3s thì fetch lại bảng xếp hạng và hiển thị vị trí
+  if (won) {
+    setTimeout(() => {
+      fetch('https://opensheet.elk.sh/1c3Zy0gG_0Vg_7FofCh0zXMZgzPZI2SczvNBjlflVG7w/Form%20Responses%201')
+        .then(res => res.json())
+        .then(data => {
+          // Dùng đúng key cột Sheet
+          const valid = data.filter(row => row['Tên người chơi?'] && row['Số bước di chuyển'] && row['Kết quả?']==='Thắng');
+          valid.sort((a, b) => {
+            const movesA = parseInt(a['Số bước di chuyển']);
+            const movesB = parseInt(b['Số bước di chuyển']);
+            if (movesA !== movesB) return movesA - movesB;
+            const timeA = a['Thời gian chơi'] ? a['Thời gian chơi'].split(':').reduce((m,s,i)=>m*60+parseInt(s),0) : 9999;
+            const timeB = b['Thời gian chơi'] ? b['Thời gian chơi'].split(':').reduce((m,s,i)=>m*60+parseInt(s),0) : 9999;
+            return timeA - timeB;
+          });
+          // Tìm vị trí của người chơi (tìm theo tên, số bước, thời gian)
+          const idx = valid.findIndex(row =>
+            row['Tên người chơi?'] === playerName &&
+            parseInt(row['Số bước di chuyển']) === moveCount &&
+            row['Thời gian chơi'] === formattedTime
+          );
+          if (idx !== -1) {
+            alert(`🎉 Vị trí của bạn trên bảng xếp hạng: #${idx+1}`);
+          } else {
+            alert('Đã gửi kết quả, vui lòng tải lại trang để xem vị trí trên bảng xếp hạng!');
+          }
+        })
+        .catch(() => {
+          alert('Không thể kiểm tra vị trí trên bảng xếp hạng!');
+        });
+    }, 2500); // Đợi 2.5s để Google Sheet cập nhật
+  }
 }
 
 function checkWin() {
