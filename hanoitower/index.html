@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <a href="spin.html" class="top-right-button">🎡 Vòng quay may mắn </a>
+    <!-- Xóa nút vòng quay trên góc -->
     <div class="container">
         <h1 class="title">Hanoi Tower Game</h1>
 
@@ -33,33 +33,67 @@
                 </ul>
             </div>
 
+
             <input type="text" name="player" placeholder="Bạn tên gì?" required />
 
-            <label for="discs">Chọn số đĩa:</label>
-            <select name="discs" id="discs">
-                <option value="3">3 đĩa</option>
-                <option value="4">4 đĩa</option>
-                <option value="5">5 đĩa</option>
-                <option value="6">6 đĩa</option>
-                <option value="7">7 đĩa</option>
-                <option value="8">8 đĩa</option>
-            </select>
+            <div style="margin-bottom:1.2rem">
+                <label><input type="radio" name="choose_mode" value="manual" checked> Tự chọn số đĩa</label>
+                <label style="margin-left:1.5em"><input type="radio" name="choose_mode" value="spin"> Quay vòng quay</label>
+            </div>
+
+            <div id="manual-select-block">
+                <label for="discs">Chọn số đĩa:</label>
+                <select name="discs" id="discs">
+                    <option value="3">3 đĩa</option>
+                    <option value="4">4 đĩa</option>
+                    <option value="5">5 đĩa</option>
+                    <option value="6">6 đĩa</option>
+                    <option value="7">7 đĩa</option>
+                    <option value="8">8 đĩa</option>
+                </select>
+            </div>
+            <div id="spin-select-block" style="display:none;text-align:center;margin:1.2em 0">
+                <a href="spin.html" class="spin-btn-in-form">🎡 Quay vòng quay chọn số đĩa</a>
+            </div>
 
             <button type="submit">Bắt đầu chơi</button>
         </form>
     </div>
 
     <script>
+                // Chuyển đổi giữa tự chọn và quay vòng quay
+                document.addEventListener('DOMContentLoaded', function () {
+                    const radios = document.getElementsByName('choose_mode');
+                    const manualBlock = document.getElementById('manual-select-block');
+                    const spinBlock = document.getElementById('spin-select-block');
+                    radios.forEach(radio => {
+                        radio.addEventListener('change', function() {
+                            if (this.value === 'manual') {
+                                manualBlock.style.display = '';
+                                spinBlock.style.display = 'none';
+                            } else {
+                                manualBlock.style.display = 'none';
+                                spinBlock.style.display = '';
+                            }
+                        });
+                    });
+                });
         // Kiểm tra nếu có kết quả quay từ trang spin
         document.addEventListener('DOMContentLoaded', function () {
+            // ...existing code...
             const selectedDiscs = localStorage.getItem('selectedDiscs');
             const lockSelection = localStorage.getItem('lockSelection');
             const discsSelect = document.getElementById('discs');
             if (selectedDiscs) {
+                // Nếu quay vòng quay xong thì tự chuyển sang chế độ tự chọn và set value
                 discsSelect.value = selectedDiscs;
-                localStorage.removeItem('selectedDiscs'); // Xóa để lần sau không tự động chọn lại
+                localStorage.removeItem('selectedDiscs');
                 // Hiển thị thông báo
                 alert(`Số đĩa đã được chọn: ${selectedDiscs} (từ vòng quay)`);
+                // Chuyển radio về manual
+                document.querySelector('input[name="choose_mode"][value="manual"]').checked = true;
+                document.getElementById('manual-select-block').style.display = '';
+                document.getElementById('spin-select-block').style.display = 'none';
             }
             if (lockSelection) {
                 discsSelect.disabled = true;

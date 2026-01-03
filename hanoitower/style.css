@@ -1,3 +1,18 @@
+.spin-btn-in-form {
+  display: inline-block;
+  background: var(--secondary-color);
+  color: #fff;
+  padding: 0.8em 1.5em;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 1.1em;
+  text-decoration: none;
+  transition: background 0.2s;
+  margin-top: 0.5em;
+}
+.spin-btn-in-form:hover {
+  background: #ff5252;
+}
 .disc.dragging {
   opacity: 0.6;
   box-shadow: 0 0 16px #4a6bff;
