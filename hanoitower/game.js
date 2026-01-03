@@ -136,6 +136,28 @@ function setupDiscs() {
   for (let i = discCount; i >= 1; i--) {
     const disc = document.createElement('div');
     disc.classList.add('disc', `size-${i}`);
+    disc.setAttribute('draggable', 'true');
+    // Drag events
+    disc.addEventListener('dragstart', (e) => {
+      if (gameEnded) {
+        e.preventDefault();
+        return;
+      }
+      // Chỉ cho phép kéo đĩa trên cùng của cọc
+      const parent = disc.parentElement;
+      if (parent && parent.lastElementChild !== disc) {
+        e.preventDefault();
+        return;
+      }
+      disc.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', '');
+      // Lưu thông tin đĩa đang kéo
+      window._draggedDisc = disc;
+    });
+    disc.addEventListener('dragend', () => {
+      disc.classList.remove('dragging');
+      window._draggedDisc = null;
+    });
     baseTower.appendChild(disc);
   }
 }
@@ -169,12 +191,46 @@ function initGame() {
 
   setupDiscs();
 
+
+  // Kéo thả đĩa
+  towers.forEach(tower => {
+    tower.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      // Chỉ highlight nếu có thể thả
+      const disc = window._draggedDisc;
+      if (!disc) return;
+      const topDisc = tower.lastElementChild;
+      if (!topDisc || disc.offsetWidth < topDisc.offsetWidth) {
+        tower.classList.add('drag-over');
+      }
+    });
+    tower.addEventListener('dragleave', () => {
+      tower.classList.remove('drag-over');
+    });
+    tower.addEventListener('drop', (e) => {
+      e.preventDefault();
+      tower.classList.remove('drag-over');
+      const disc = window._draggedDisc;
+      if (!disc) return;
+      if (gameEnded) return;
+      const topDisc = tower.lastElementChild;
+      if (!topDisc || disc.offsetWidth < topDisc.offsetWidth) {
+        disc.classList.remove('dragging');
+        tower.appendChild(disc);
+        moveCount++;
+        const movesLeft = Math.max(0, maxMoves - moveCount);
+        document.getElementById('moves').textContent = movesLeft;
+        checkWin();
+      }
+      window._draggedDisc = null;
+    });
+  });
+
+  // Vẫn giữ click để chọn/thả như cũ (tùy chọn)
   towers.forEach(tower => {
     tower.addEventListener('click', () => {
       if (gameEnded) return;
-
       const topDisc = tower.lastElementChild;
-
       if (!selectedDisc && topDisc) {
         selectedDisc = topDisc;
         selectedDisc.style.border = '2px solid #000';
@@ -184,10 +240,8 @@ function initGame() {
           selectedDisc.style.border = '';
           tower.appendChild(selectedDisc);
           moveCount++;
-
           const movesLeft = Math.max(0, maxMoves - moveCount);
           document.getElementById('moves').textContent = movesLeft;
-
           checkWin();
         } else {
           selectedDisc.style.border = '';

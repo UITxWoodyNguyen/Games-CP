@@ -1,3 +1,11 @@
+.disc.dragging {
+  opacity: 0.6;
+  box-shadow: 0 0 16px #4a6bff;
+}
+.tower.drag-over {
+  background: #e3eaff;
+  transition: background 0.2s;
+}
 /* Leaderboard Table */
 .leaderboard-table-wrapper {
   width: 100%;
