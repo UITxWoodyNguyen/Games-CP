@@ -100,10 +100,51 @@
 
 body {
   font-family: 'Be Vietnam Pro', sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
   color: var(--dark-color);
   line-height: 1.6;
+  /* Gradient động */
+  background: linear-gradient(120deg, #a18cd1 0%, #fbc2eb 100%);
+  background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: -100px;
+  left: -100px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, #4a6bff55 0%, #fff0 80%);
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(10px);
+  animation: bgmove 12s linear infinite alternate;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -120px;
+  right: -120px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #ff6b6b44 0%, #fff0 80%);
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(12px);
+  animation: bgmove2 14s linear infinite alternate;
+}
+
+@keyframes bgmove {
+  0% { top: -100px; left: -100px; }
+  100% { top: 80px; left: 120px; }
+}
+@keyframes bgmove2 {
+  0% { bottom: -120px; right: -120px; }
+  100% { bottom: 60px; right: 80px; }
 }
 
 /* Container chung */
