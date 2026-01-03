@@ -17,6 +17,18 @@
 
         <div id="leaderboard" style="margin-bottom:2rem;text-align:center">
             <h2>🏆 Bảng xếp hạng</h2>
+            <div style="margin-bottom: 1em;">
+                <label for="filter-discs">Lọc theo số đĩa: </label>
+                <select id="filter-discs">
+                    <option value="all">Tất cả</option>
+                    <option value="3">3 đĩa</option>
+                    <option value="4">4 đĩa</option>
+                    <option value="5">5 đĩa</option>
+                    <option value="6">6 đĩa</option>
+                    <option value="7">7 đĩa</option>
+                    <option value="8">8 đĩa</option>
+                </select>
+            </div>
             <div class="leaderboard-table-wrapper">
                 <div id="leaderboard-table">Đang tải...</div>
             </div>
@@ -103,11 +115,20 @@
             // Hàm cập nhật bảng xếp hạng
             function updateLeaderboard() {
                 const leaderboardTable = document.getElementById('leaderboard-table');
+                const filterDiscs = document.getElementById('filter-discs');
+                const selectedDiscs = filterDiscs ? filterDiscs.value : 'all';
                 fetch('https://opensheet.elk.sh/1c3Zy0gG_0Vg_7FofCh0zXMZgzPZI2SczvNBjlflVG7w/Form%20Responses%201')
                     .then(res => res.json())
                     .then(data => {
                         // Lọc các bản ghi hợp lệ
-                        const valid = data.filter(row => row['Tên người chơi?'] && row['Số bước di chuyển'] && row['Kết quả?']==='Thắng');
+                        let valid = data.filter(row => row['Tên người chơi?'] && row['Số bước di chuyển'] && row['Kết quả?']==='Thắng');
+                        // Lọc theo số đĩa nếu có chọn
+                        if (selectedDiscs !== 'all') {
+                            valid = valid.filter(row => {
+                                // Hỗ trợ cả trường 'Số đĩa?' và 'Số đĩa'
+                                return (row['Số đĩa?'] || row['Số đĩa']) == selectedDiscs;
+                            });
+                        }
                         // Sắp xếp theo số bước tăng dần, nếu bằng thì thời gian tăng dần
                         valid.sort((a, b) => {
                             const movesA = parseInt(a['Số bước di chuyển']);
@@ -127,7 +148,7 @@
                         let html = '<table class="leaderboard-table"><thead><tr><th>Hạng</th><th>Tên</th><th>Số đĩa</th><th>Số bước</th><th>Thời gian</th></tr></thead><tbody>';
                         top.forEach((row, i) => {
                             let rankClass = i < 3 ? `rank-${i+1}` : '';
-                            html += `<tr><td class="${rankClass}">${i+1}</td><td>${row['Tên người chơi?']||''}</td><td>${row['Số đĩa?']||''}</td><td>${row['Số bước di chuyển']||''}</td><td>${row['Thời gian chơi']||''}</td></tr>`;
+                            html += `<tr><td class="${rankClass}">${i+1}</td><td>${row['Tên người chơi?']||''}</td><td>${row['Số đĩa?']||row['Số đĩa']||''}</td><td>${row['Số bước di chuyển']||''}</td><td>${row['Thời gian chơi']||''}</td></tr>`;
                         });
                         html += '</tbody></table>';
                         leaderboardTable.innerHTML = html;
@@ -135,6 +156,12 @@
                     .catch(() => {
                         leaderboardTable.innerHTML = '<i>Lỗi tải dữ liệu bảng xếp hạng</i>';
                     });
+            }
+
+            // Gắn sự kiện filter
+            const filterDiscs = document.getElementById('filter-discs');
+            if (filterDiscs) {
+                filterDiscs.addEventListener('change', updateLeaderboard);
             }
 
             updateLeaderboard();
