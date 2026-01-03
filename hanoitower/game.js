@@ -201,13 +201,26 @@ function initGame() {
         document.getElementById('tower-2')
       ];
       let step = 0;
+      function getTopDisc(tower) {
+        // Lấy đĩa nhỏ nhất trên cùng (theo thứ tự DOM là dưới lên trên)
+        const discs = Array.from(tower.children);
+        return discs.length ? discs[discs.length - 1] : null;
+      }
       function doStep() {
         if (step >= Math.min(steps, moves.length) || gameEnded) return;
         const [from, to] = moves[step];
         const fromTower = towersArr[from];
         const toTower = towersArr[to];
-        const disc = fromTower.lastElementChild;
+        const disc = getTopDisc(fromTower);
         if (!disc) return;
+        // Kiểm tra luật trước khi di chuyển
+        const topTo = getTopDisc(toTower);
+        if (topTo && disc.offsetWidth > topTo.offsetWidth) {
+          // Nếu sai luật thì bỏ qua bước này
+          step++;
+          setTimeout(doStep, 10);
+          return;
+        }
         toTower.appendChild(disc);
         moveCount++;
         const movesLeft = Math.max(0, maxMoves - moveCount);
