@@ -36,9 +36,9 @@
 
             <input type="text" name="player" placeholder="Bạn tên gì?" required />
 
-            <div style="margin-bottom:1.2rem">
+            <div class="choose-mode-row">
                 <label><input type="radio" name="choose_mode" value="manual" checked> Tự chọn số đĩa</label>
-                <label style="margin-left:1.5em"><input type="radio" name="choose_mode" value="spin"> Quay vòng quay</label>
+                <label><input type="radio" name="choose_mode" value="spin"> Quay vòng quay</label>
             </div>
 
             <div id="manual-select-block">
@@ -71,6 +71,9 @@
                             if (this.value === 'manual') {
                                 manualBlock.style.display = '';
                                 spinBlock.style.display = 'none';
+                                // Mở khoá select nếu bị disabled
+                                const discsSelect = document.getElementById('discs');
+                                if (discsSelect.disabled) discsSelect.disabled = false;
                             } else {
                                 manualBlock.style.display = 'none';
                                 spinBlock.style.display = '';

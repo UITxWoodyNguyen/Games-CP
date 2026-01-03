@@ -1,3 +1,17 @@
+.choose-mode-row {
+  display: flex;
+  gap: 2em;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+.choose-mode-row label {
+  font-weight: 600;
+  font-size: 1.08em;
+  cursor: pointer;
+}
+.choose-mode-row input[type="radio"] {
+  margin-right: 0.5em;
+}
 .spin-btn-in-form {
   display: inline-block;
   background: var(--secondary-color);
