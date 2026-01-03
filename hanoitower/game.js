@@ -294,7 +294,11 @@ function initGame() {
   towers = document.querySelectorAll('.tower');
 
   const urlParams = new URLSearchParams(window.location.search);
-  const playerClass = urlParams.get('player') || 'Không rõ';
+  let playerClass = urlParams.get('player');
+  if (!playerClass || playerClass === 'Không rõ') {
+    // Nếu không có trên URL, lấy từ localStorage (trường hợp quay vòng quay)
+    playerClass = localStorage.getItem('playerName') || 'Không rõ';
+  }
   discCount = Math.min(parseInt(urlParams.get('discs')) || 3, 8);
   maxMoves = Math.pow(2, discCount) + 5;
   document.getElementById('player-name').textContent = playerClass;
