@@ -64,40 +64,45 @@
                 discsSelect.disabled = true;
             }
 
-            // Bảng xếp hạng
-            const leaderboardTable = document.getElementById('leaderboard-table');
-            fetch('https://opensheet.elk.sh/1c3Zy0gG_0Vg_7FofCh0zXMZgzPZI2SczvNBjlflVG7w/Form%20Responses%201')
-                .then(res => res.json())
-                .then(data => {
-                    // Lọc các bản ghi hợp lệ
-                    const valid = data.filter(row => row['Tên người chơi?'] && row['Số bước di chuyển'] && row['Kết quả?']==='Thắng');
-                    // Sắp xếp theo số bước tăng dần, nếu bằng thì thời gian tăng dần
-                    valid.sort((a, b) => {
-                        const movesA = parseInt(a['Số bước di chuyển']);
-                        const movesB = parseInt(b['Số bước di chuyển']);
-                        if (movesA !== movesB) return movesA - movesB;
-                        // So sánh thời gian (mm:ss)
-                        const timeA = a['Thời gian chơi'] ? a['Thời gian chơi'].split(':').reduce((m,s,i)=>m*60+parseInt(s),0) : 9999;
-                        const timeB = b['Thời gian chơi'] ? b['Thời gian chơi'].split(':').reduce((m,s,i)=>m*60+parseInt(s),0) : 9999;
-                        return timeA - timeB;
+            // Hàm cập nhật bảng xếp hạng
+            function updateLeaderboard() {
+                const leaderboardTable = document.getElementById('leaderboard-table');
+                fetch('https://opensheet.elk.sh/1c3Zy0gG_0Vg_7FofCh0zXMZgzPZI2SczvNBjlflVG7w/Form%20Responses%201')
+                    .then(res => res.json())
+                    .then(data => {
+                        // Lọc các bản ghi hợp lệ
+                        const valid = data.filter(row => row['Tên người chơi?'] && row['Số bước di chuyển'] && row['Kết quả?']==='Thắng');
+                        // Sắp xếp theo số bước tăng dần, nếu bằng thì thời gian tăng dần
+                        valid.sort((a, b) => {
+                            const movesA = parseInt(a['Số bước di chuyển']);
+                            const movesB = parseInt(b['Số bước di chuyển']);
+                            if (movesA !== movesB) return movesA - movesB;
+                            // So sánh thời gian (mm:ss)
+                            const timeA = a['Thời gian chơi'] ? a['Thời gian chơi'].split(':').reduce((m,s,i)=>m*60+parseInt(s),0) : 9999;
+                            const timeB = b['Thời gian chơi'] ? b['Thời gian chơi'].split(':').reduce((m,s,i)=>m*60+parseInt(s),0) : 9999;
+                            return timeA - timeB;
+                        });
+                        // Lấy top 10
+                        const top = valid.slice(0, 10);
+                        if (top.length === 0) {
+                            leaderboardTable.innerHTML = '<i>Chưa có dữ liệu</i>';
+                            return;
+                        }
+                        let html = '<table class="leaderboard-table"><thead><tr><th>Hạng</th><th>Tên</th><th>Số đĩa</th><th>Số bước</th><th>Thời gian</th></tr></thead><tbody>';
+                        top.forEach((row, i) => {
+                            let rankClass = i < 3 ? `rank-${i+1}` : '';
+                            html += `<tr><td class="${rankClass}">${i+1}</td><td>${row['Tên người chơi?']||''}</td><td>${row['Số đĩa?']||''}</td><td>${row['Số bước di chuyển']||''}</td><td>${row['Thời gian chơi']||''}</td></tr>`;
+                        });
+                        html += '</tbody></table>';
+                        leaderboardTable.innerHTML = html;
+                    })
+                    .catch(() => {
+                        leaderboardTable.innerHTML = '<i>Lỗi tải dữ liệu bảng xếp hạng</i>';
                     });
-                    // Lấy top 10
-                    const top = valid.slice(0, 10);
-                    if (top.length === 0) {
-                        leaderboardTable.innerHTML = '<i>Chưa có dữ liệu</i>';
-                        return;
-                    }
-                    let html = '<table class="leaderboard-table"><thead><tr><th>Hạng</th><th>Tên</th><th>Số đĩa</th><th>Số bước</th><th>Thời gian</th></tr></thead><tbody>';
-                    top.forEach((row, i) => {
-                        let rankClass = i < 3 ? `rank-${i+1}` : '';
-                        html += `<tr><td class="${rankClass}">${i+1}</td><td>${row['Tên người chơi?']||''}</td><td>${row['Số đĩa?']||''}</td><td>${row['Số bước di chuyển']||''}</td><td>${row['Thời gian chơi']||''}</td></tr>`;
-                    });
-                    html += '</tbody></table>';
-                    leaderboardTable.innerHTML = html;
-                })
-                .catch(() => {
-                    leaderboardTable.innerHTML = '<i>Lỗi tải dữ liệu bảng xếp hạng</i>';
-                });
+            }
+
+            updateLeaderboard();
+            setInterval(updateLeaderboard, 5000); // Cập nhật mỗi 5 giây
         });
     </script>
 </body>
