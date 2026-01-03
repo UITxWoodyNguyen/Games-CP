@@ -180,6 +180,51 @@ function resetGame() {
 }
 
 function initGame() {
+    // Auto Solve logic
+    function hanoiMoves(n, from, to, aux, moves) {
+      if (n === 0) return;
+      hanoiMoves(n-1, from, aux, to, moves);
+      moves.push([from, to]);
+      hanoiMoves(n-1, aux, to, from, moves);
+    }
+
+    function doAutoSolve(steps = 6) {
+      if (discCount < 5) {
+        alert('Chỉ hỗ trợ auto solve cho từ 5 đĩa trở lên!');
+        return;
+      }
+      const moves = [];
+      hanoiMoves(discCount, 0, 2, 1, moves);
+      const towersArr = [
+        document.getElementById('tower-0'),
+        document.getElementById('tower-1'),
+        document.getElementById('tower-2')
+      ];
+      let step = 0;
+      function doStep() {
+        if (step >= Math.min(steps, moves.length) || gameEnded) return;
+        const [from, to] = moves[step];
+        const fromTower = towersArr[from];
+        const toTower = towersArr[to];
+        const disc = fromTower.lastElementChild;
+        if (!disc) return;
+        toTower.appendChild(disc);
+        moveCount++;
+        const movesLeft = Math.max(0, maxMoves - moveCount);
+        document.getElementById('moves').textContent = movesLeft;
+        checkWin();
+        step++;
+        setTimeout(doStep, 600);
+      }
+      doStep();
+    }
+
+    const autoSolveBtn = document.getElementById('auto-solve-btn');
+    if (autoSolveBtn) {
+      autoSolveBtn.addEventListener('click', () => {
+        doAutoSolve(Math.floor(Math.random()*3)+5); // 5-7 bước
+      });
+    }
   towers = document.querySelectorAll('.tower');
 
   const urlParams = new URLSearchParams(window.location.search);
