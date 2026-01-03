@@ -61,32 +61,30 @@
     </div>
 
     <script>
-                // Chuyển đổi giữa tự chọn và quay vòng quay
-                document.addEventListener('DOMContentLoaded', function () {
-                    const radios = document.getElementsByName('choose_mode');
-                    const manualBlock = document.getElementById('manual-select-block');
-                    const spinBlock = document.getElementById('spin-select-block');
-                    radios.forEach(radio => {
-                        radio.addEventListener('change', function() {
-                            if (this.value === 'manual') {
-                                manualBlock.style.display = '';
-                                spinBlock.style.display = 'none';
-                                // Mở khoá select nếu bị disabled
-                                const discsSelect = document.getElementById('discs');
-                                if (discsSelect.disabled) discsSelect.disabled = false;
-                            } else {
-                                manualBlock.style.display = 'none';
-                                spinBlock.style.display = '';
-                            }
-                        });
-                    });
-                });
-        // Kiểm tra nếu có kết quả quay từ trang spin
         document.addEventListener('DOMContentLoaded', function () {
-            // ...existing code...
+            // Chuyển đổi giữa tự chọn và quay vòng quay
+            const radios = document.getElementsByName('choose_mode');
+            const manualBlock = document.getElementById('manual-select-block');
+            const spinBlock = document.getElementById('spin-select-block');
+            const discsSelect = document.getElementById('discs');
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'manual') {
+                        manualBlock.style.display = '';
+                        spinBlock.style.display = 'none';
+                        // Mở khoá select nếu bị disabled và xóa lockSelection
+                        if (discsSelect.disabled) discsSelect.disabled = false;
+                        localStorage.removeItem('lockSelection');
+                    } else {
+                        manualBlock.style.display = 'none';
+                        spinBlock.style.display = '';
+                    }
+                });
+            });
+
+            // Kiểm tra nếu có kết quả quay từ trang spin
             const selectedDiscs = localStorage.getItem('selectedDiscs');
             const lockSelection = localStorage.getItem('lockSelection');
-            const discsSelect = document.getElementById('discs');
             if (selectedDiscs) {
                 // Nếu quay vòng quay xong thì tự chuyển sang chế độ tự chọn và set value
                 discsSelect.value = selectedDiscs;
@@ -95,8 +93,8 @@
                 alert(`Số đĩa đã được chọn: ${selectedDiscs} (từ vòng quay)`);
                 // Chuyển radio về manual
                 document.querySelector('input[name="choose_mode"][value="manual"]').checked = true;
-                document.getElementById('manual-select-block').style.display = '';
-                document.getElementById('spin-select-block').style.display = 'none';
+                manualBlock.style.display = '';
+                spinBlock.style.display = 'none';
             }
             if (lockSelection) {
                 discsSelect.disabled = true;
