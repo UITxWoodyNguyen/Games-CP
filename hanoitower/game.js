@@ -181,11 +181,46 @@ function resetGame() {
 
 function initGame() {
     // Auto Solve logic
-    function hanoiMoves(n, from, to, aux, moves) {
+
+    // Helper: Get current state of all towers as arrays of disc sizes (bottom to top)
+    function getCurrentTowersState() {
+      return [0, 1, 2].map(i => {
+        const tower = document.getElementById(`tower-${i}`);
+        // Discs are DOM children, bottom to top
+        return Array.from(tower.children).map(disc => {
+          // Extract disc size from class (e.g., 'size-3')
+          const match = disc.className.match(/size-(\d+)/);
+          return match ? parseInt(match[1]) : null;
+        }).filter(Boolean);
+      });
+    }
+
+    // Generalized Hanoi solver for any configuration
+    function solveHanoiArbitrary(state, goal, moves, n) {
+      // state: [ [bottom..top], [..], [..] ]
+      // goal:  [ [..], [..], [bottom..top] ]
+      // n: number of discs to consider (largest n discs)
       if (n === 0) return;
-      hanoiMoves(n-1, from, aux, to, moves);
+      // Find which tower the nth (largest) disc is on
+      let from = -1, to = -1;
+      for (let i = 0; i < 3; i++) {
+        if (state[i][0] === n) from = i;
+        if (goal[i][0] === n) to = i;
+      }
+      if (from === -1 || to === -1) return;
+      // Remove nth disc from current and goal
+      const stateCopy = state.map(arr => arr.slice());
+      const goalCopy = goal.map(arr => arr.slice());
+      stateCopy[from].shift();
+      goalCopy[to].shift();
+      // Find aux tower
+      const aux = [0,1,2].find(i => i !== from && i !== to);
+      // Move smaller discs to aux (as needed)
+      solveHanoiArbitrary(stateCopy, [[],[],[]].map((_,i)=>i===aux?stateCopy.flat().sort((a,b)=>a-b):[]), moves, n-1);
+      // Move nth disc
       moves.push([from, to]);
-      hanoiMoves(n-1, aux, to, from, moves);
+      // Move smaller discs to goal
+      solveHanoiArbitrary([[],[],[]].map((_,i)=>i===aux?stateCopy.flat().sort((a,b)=>a-b):[]), goalCopy, moves, n-1);
     }
 
     function doAutoSolve(steps = 6) {
@@ -193,8 +228,19 @@ function initGame() {
         alert('Chỉ hỗ trợ auto solve cho từ 5 đĩa trở lên!');
         return;
       }
+      // Get current state
+      const state = getCurrentTowersState();
+      // Build goal state: all discs on tower 2, bottom to top
+      const goal = [[], [], []];
+      goal[2] = [];
+      for (let i = discCount; i >= 1; i--) goal[2].push(i);
+      // Copy state arrays (bottom to top)
+      const stateCopy = state.map(arr => arr.slice());
+      const goalCopy = goal.map(arr => arr.slice());
+      // Generate moves
       const moves = [];
-      hanoiMoves(discCount, 0, 2, 1, moves);
+      solveHanoiArbitrary(stateCopy, goalCopy, moves, discCount);
+      // Animate moves
       const towersArr = [
         document.getElementById('tower-0'),
         document.getElementById('tower-1'),
@@ -202,7 +248,6 @@ function initGame() {
       ];
       let step = 0;
       function getTopDisc(tower) {
-        // Lấy đĩa nhỏ nhất trên cùng (theo thứ tự DOM là dưới lên trên)
         const discs = Array.from(tower.children);
         return discs.length ? discs[discs.length - 1] : null;
       }
@@ -212,11 +257,10 @@ function initGame() {
         const fromTower = towersArr[from];
         const toTower = towersArr[to];
         const disc = getTopDisc(fromTower);
-        if (!disc) return;
-        // Kiểm tra luật trước khi di chuyển
+        if (!disc) { step++; setTimeout(doStep, 10); return; }
+        // Check move legality
         const topTo = getTopDisc(toTower);
         if (topTo && disc.offsetWidth > topTo.offsetWidth) {
-          // Nếu sai luật thì bỏ qua bước này
           step++;
           setTimeout(doStep, 10);
           return;
