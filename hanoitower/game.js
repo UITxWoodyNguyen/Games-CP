@@ -105,7 +105,7 @@ function endGame(won) {
             row['Thời gian chơi'] === formattedTime
           );
           if (idx !== -1) {
-            alert(`🎉 Vị trí của bạn trên bảng xếp hạng: #${idx+1}`);
+            alert(`🎉 Bạn đã hoàn thành trò chơi trong ${formattedTime} và đạt được vị trí thứ ${idx+1} trên bảng xếp hạng!`);
           } else {
             alert('Đã gửi kết quả, vui lòng tải lại trang để xem vị trí trên bảng xếp hạng!');
           }

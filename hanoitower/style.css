@@ -15,7 +15,9 @@
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(74,107,255,0.10);
   overflow-x: auto;
+  overflow-y: auto;
   padding: 1.5rem 1rem;
+  max-height: 350px;
 }
 
 .leaderboard-table {

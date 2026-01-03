@@ -82,8 +82,8 @@
                             const timeB = b['Thời gian chơi'] ? b['Thời gian chơi'].split(':').reduce((m,s,i)=>m*60+parseInt(s),0) : 9999;
                             return timeA - timeB;
                         });
-                        // Lấy top 10
-                        const top = valid.slice(0, 10);
+                        // Lấy top 5
+                        const top = valid.slice(0, 5);
                         if (top.length === 0) {
                             leaderboardTable.innerHTML = '<i>Chưa có dữ liệu</i>';
                             return;
