@@ -232,9 +232,15 @@ function initGame() {
       doStep();
     }
 
+    let autoSolveUsed = false;
     const autoSolveBtn = document.getElementById('auto-solve-btn');
     if (autoSolveBtn) {
       autoSolveBtn.addEventListener('click', () => {
+        if (autoSolveUsed) {
+          alert('Bạn chỉ được dùng Auto Solve 1 lần!');
+          return;
+        }
+        autoSolveUsed = true;
         doAutoSolve(Math.floor(Math.random()*3)+5); // 5-7 bước
       });
     }
