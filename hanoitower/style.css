@@ -1,3 +1,79 @@
+/* --- Light/White Mode (default) --- */
+body.white-mode, body:not(.dark-mode) {
+  background: linear-gradient(135deg, #f8fafc 0%, #e3e9f7 100%);
+  color: #222;
+}
+
+.white-mode .container, body:not(.dark-mode) .container {
+  background: #fff;
+  color: #222;
+}
+
+/* --- Dark Mode --- */
+body.dark-mode {
+  background: linear-gradient(135deg, #232526 0%, #414345 100%);
+  color: #f1f1f1;
+}
+
+.dark-mode .container {
+  background: #23272f;
+  color: #f1f1f1;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+}
+
+.dark-mode .leaderboard-table-wrapper {
+  background: #23272f;
+  color: #f1f1f1;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+}
+
+.dark-mode .leaderboard-table th, .dark-mode .leaderboard-table td {
+  color: #f1f1f1;
+}
+
+.dark-mode .disc {
+  box-shadow: 3px 3px 8px #222, -3px -3px 8px #444;
+}
+
+.dark-mode .disc.selected {
+  box-shadow: 0 0 12px #fff2, 0 0 25px #fff4;
+}
+
+.dark-mode .spin-btn-in-form {
+  background: #444;
+  color: #fff;
+}
+
+.dark-mode .spin-btn-in-form:hover {
+  background: #ff5252;
+}
+
+.dark-mode .tower.drag-over {
+  background: #333b4a;
+}
+
+/* Nút chuyển mode */
+.mode-toggle-btn {
+  position: fixed;
+  top: 18px;
+  right: 24px;
+  z-index: 1000;
+  background: #fff;
+  color: #222;
+  border: 1px solid #bbb;
+  border-radius: 20px;
+  padding: 0.5em 1.2em;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0001;
+  transition: background 0.2s, color 0.2s;
+}
+.dark-mode .mode-toggle-btn {
+  background: #23272f;
+  color: #fff;
+  border: 1px solid #444;
+}
 .choose-mode-row {
   display: flex;
   gap: 2em;
@@ -386,34 +462,42 @@ button:hover {
 /* Đĩa theo kích cỡ */
 .size-1 {
   width: 40px;
+  background: linear-gradient(145deg, #ff6b6b, #ffb3b3);
 }
 
 .size-2 {
   width: 60px;
+  background: linear-gradient(145deg, #ffd93d, #fff6b3);
 }
 
 .size-3 {
   width: 80px;
+  background: linear-gradient(145deg, #6BCB77, #b3ffd9);
 }
 
 .size-4 {
   width: 100px;
+  background: linear-gradient(145deg, #4D96FF, #b3d1ff);
 }
 
 .size-5 {
   width: 120px;
+  background: linear-gradient(145deg, #C780FA, #f3b3ff);
 }
 
 .size-6 {
   width: 140px;
+  background: linear-gradient(145deg, #FFA07A, #ffe0b3);
 }
 
 .size-7 {
   width: 160px;
+  background: linear-gradient(145deg, #00bcd4, #b3f6ff);
 }
 
 .size-8 {
   width: 180px;
+  background: linear-gradient(145deg, #8d6e63, #d7ccc8);
 }
 
 /* Thông tin game */

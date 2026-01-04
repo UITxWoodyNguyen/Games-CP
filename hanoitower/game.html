@@ -12,6 +12,7 @@
 </head>
 
 <body>
+        <button class="mode-toggle-btn" id="mode-toggle-btn" title="Chuyển Dark/White mode">🌙 Dark Mode</button>
     <button class="back-button" onclick="window.location.href='index.html'">⬅️ Quay lại</button>
     <div class="container">
         <h1 class="title">Hanoi Tower</h1>
@@ -46,6 +47,33 @@
         </div>
     </div>
 </body>
+    <script>
+        // Dark/White mode toggle
+        const modeBtn = document.getElementById('mode-toggle-btn');
+        function setMode(mode) {
+            if (mode === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.body.classList.remove('white-mode');
+                modeBtn.textContent = '☀️ White Mode';
+                localStorage.setItem('themeMode', 'dark');
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.body.classList.add('white-mode');
+                modeBtn.textContent = '🌙 Dark Mode';
+                localStorage.setItem('themeMode', 'white');
+            }
+        }
+        modeBtn.addEventListener('click', function() {
+            if (document.body.classList.contains('dark-mode')) {
+                setMode('white');
+            } else {
+                setMode('dark');
+            }
+        });
+        // Khởi tạo theo localStorage
+        const savedMode = localStorage.getItem('themeMode');
+        setMode(savedMode === 'dark' ? 'dark' : 'white');
+    </script>
 
 
 </html>

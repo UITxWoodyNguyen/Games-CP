@@ -94,6 +94,8 @@ spinBtn.onclick = function () {
             // Chuyển thẳng sang game.html với tên và số đĩa
             setTimeout(() => {
                 window.location.href = `game.html?player=${encodeURIComponent(playerName)}&discs=${realSelected}`;
+                // Xóa playerName khỏi localStorage để tránh giữ tên cũ cho lần sau
+                localStorage.removeItem('playerName');
             }, 1200); // Chờ 1.2 giây rồi chuyển trang
         }
     }

@@ -226,7 +226,7 @@ function initGame() {
       solveHanoiArbitrary([[],[],[]].map((_,i)=>i===aux?stateCopy.flat().sort((a,b)=>a-b):[]), goalCopy, moves, n-1);
     }
 
-    function doAutoSolve(steps = 6) {
+    function doAutoSolve(steps = 5) {
       if (discCount < 5) {
         alert('Chỉ hỗ trợ auto solve cho từ 5 đĩa trở lên!');
         return;
@@ -288,7 +288,7 @@ function initGame() {
           return;
         }
         autoSolveUsed = true;
-        doAutoSolve(Math.floor(Math.random()*3)+5); // 5-7 bước
+        doAutoSolve(5); // luôn gợi ý 5 bước
       });
     }
   towers = document.querySelectorAll('.tower');
