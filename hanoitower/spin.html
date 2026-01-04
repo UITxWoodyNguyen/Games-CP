@@ -64,7 +64,31 @@
 <body>
 
     <a href="index.html" class="home-button"> 🏠 Trang chủ</a>
-    <div id="player-spin-name" style="position:fixed;top:18px;right:24px;font-weight:700;font-size:1.1em;color:#4a6bff;z-index:1001;"></div>
+    <div id="player-spin-name" class="player-spin-name-box"></div>
+    <style>
+    .player-spin-name-box {
+        position: fixed;
+        top: 58px;
+        right: 24px;
+        min-width: 120px;
+        background: #fff;
+        color: #4a6bff;
+        border: 1.5px solid #bbb;
+        border-radius: 18px;
+        font-weight: 700;
+        font-size: 1.08em;
+        padding: 0.45em 1.2em;
+        z-index: 1001;
+        box-shadow: 0 2px 8px #0001;
+        text-align: right;
+        transition: background 0.2s, color 0.2s;
+    }
+    body.dark-mode .player-spin-name-box {
+        background: #23272f;
+        color: #fff;
+        border: 1.5px solid #444;
+    }
+    </style>
 
     <h1>🎡 Vòng quay chọn số đĩa</h1>
 
