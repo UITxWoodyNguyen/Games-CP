@@ -6,7 +6,7 @@ app.use(cors());
 app.use(express.json());
 
 const SHEET_ID = '1c3Zy0gG_0Vg_7FofCh0zXMZgzPZI2SczvNBjlflVG7w'; // Thay bằng ID bảng tính của bạn
-const SHEET_NAME = 'Hanoi Tower Results'; // hoặc tên sheet bạn dùng
+const SHEET_NAME = 'Form Responses 1'; // hoặc tên sheet bạn dùng
 
 // Load credentials từ file JSON tải về
 const auth = new google.auth.GoogleAuth({
