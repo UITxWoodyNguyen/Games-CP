@@ -103,14 +103,25 @@
         // Hiển thị tên player ở góc phải trên màn hình spin, luôn lấy từ localStorage
         function showSpinPlayerName() {
             const playerSpinName = localStorage.getItem('playerName');
+            let nameBox = document.getElementById('player-spin-name');
+            if (!nameBox) {
+                // Nếu chưa có box, tạo mới và chèn vào body
+                nameBox = document.createElement('div');
+                nameBox.id = 'player-spin-name';
+                nameBox.className = 'player-spin-name-box';
+                // Đảm bảo nằm dưới dark/white mode toggle nếu có
+                document.body.appendChild(nameBox);
+            }
             if (playerSpinName) {
-                document.getElementById('player-spin-name').textContent = '👤 ' + playerSpinName;
+                nameBox.textContent = '👤 ' + playerSpinName;
+                nameBox.style.display = 'block';
             } else {
-                document.getElementById('player-spin-name').textContent = '';
+                nameBox.textContent = '';
+                nameBox.style.display = 'none';
             }
         }
         document.addEventListener('DOMContentLoaded', showSpinPlayerName);
-        // Nếu user reload trang vẫn giữ tên
+        // Nếu user reload trang vẫn giữ tên, và nếu DOM chưa sẵn sàng thì thử lại
         setTimeout(showSpinPlayerName, 200);
         </script>
 </body>
