@@ -12,7 +12,8 @@
 </head>
 
 <body>
-        <button class="mode-toggle-btn" id="mode-toggle-btn" title="Chuyển Dark/White mode">🌙 Dark Mode</button>
+    <button class="mode-toggle-btn" id="mode-toggle-btn" title="Chuyển Dark/White mode">🌙 Dark Mode</button>
+    <div id="player-game-name" style="position:fixed;top:18px;right:24px;font-weight:700;font-size:1.1em;color:#4a6bff;z-index:1001;"></div>
     <button class="back-button" onclick="window.location.href='index.html'">⬅️ Quay lại</button>
     <div class="container">
         <h1 class="title">Hanoi Tower</h1>
@@ -48,6 +49,23 @@
     </div>
 </body>
     <script>
+                // Hiển thị tên player ở góc phải trên màn hình game
+                function showPlayerNameCorner() {
+                    let playerName = '';
+                    // Lấy từ DOM nếu đã render, nếu không thì lấy từ localStorage
+                    const domName = document.getElementById('player-name');
+                    if (domName && domName.textContent && domName.textContent !== '---') {
+                        playerName = domName.textContent;
+                    } else {
+                        playerName = localStorage.getItem('playerName') || '';
+                    }
+                    if (playerName) {
+                        document.getElementById('player-game-name').textContent = '👤 ' + playerName;
+                    }
+                }
+                // Gọi khi DOM ready và sau khi tên player được render
+                document.addEventListener('DOMContentLoaded', showPlayerNameCorner);
+                setTimeout(showPlayerNameCorner, 300); // Đảm bảo cập nhật sau khi JS render tên
         // Dark/White mode toggle
         const modeBtn = document.getElementById('mode-toggle-btn');
         function setMode(mode) {

@@ -62,7 +62,9 @@
 </head>
 
 <body>
+
     <a href="index.html" class="home-button"> 🏠 Trang chủ</a>
+    <div id="player-spin-name" style="position:fixed;top:18px;right:24px;font-weight:700;font-size:1.1em;color:#4a6bff;z-index:1001;"></div>
 
     <h1>🎡 Vòng quay chọn số đĩa</h1>
 
@@ -72,7 +74,14 @@
 
     <div id="result"></div>
 
-    <script defer src="spin.js"></script>
+        <script defer src="spin.js"></script>
+        <script>
+        // Hiển thị tên player ở góc phải trên màn hình spin
+        const playerSpinName = localStorage.getItem('playerName');
+        if (playerSpinName) {
+            document.getElementById('player-spin-name').textContent = '👤 ' + playerSpinName;
+        }
+        </script>
 </body>
 
 </html>
