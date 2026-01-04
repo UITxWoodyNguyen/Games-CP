@@ -1,57 +1,93 @@
-# Ha Noi Tower
 
-A minimalist, interactive implementation of the classic mathematical puzzle. Test your logic and recursive thinking by moving the entire stack of disks from the source rod to the destination rod.
+# Hanoi Tower Game
 
-## 📖 Table of Contents
-
-* [Overview](https://en.wikipedia.org/wiki/Tower_of_Hanoi)
-* [Rules of the Game](https://en.wikipedia.org/wiki/Tower_of_Hanoi#Solution)
-* [The Legend](https://en.wikipedia.org/wiki/Tower_of_Hanoi)
-* [The Algorithm](https://en.wikipedia.org/wiki/Tower_of_Hanoi)
-* [Installation & Usage](https://en.wikipedia.org/wiki/Tower_of_Hanoi)
-* [Complexity](https://en.wikipedia.org/wiki/Tower_of_Hanoi)
+A modern, interactive web version of the classic Tower of Hanoi puzzle. Play, compete, and learn with a beautiful UI, leaderboard, and smart features!
 
 ---
 
-## 🧐 Overview
+## 🚩 Features
 
-The **Tower of Hanoi** consists of three rods and a number of disks of different diameters, which can slide onto any rod. The puzzle begins with the disks stacked on one rod in order of decreasing size (the smallest at the top, creating a conical shape).
+- **Classic Hanoi Tower gameplay**: Move all discs to another tower, obeying the rules.
+- **Multiple disc options**: Choose 3–8 discs, or use the spinning wheel for a random challenge.
+- **Drag & drop or click-to-move**: Intuitive controls for all devices.
+- **Auto Solve (Hint)**: Get a 5-move hint from any current state (one use per game).
+- **Leaderboard**: Online ranking by moves and time, filterable by disc count.
+- **Dark/White mode**: Switchable UI themes.
+- **Mobile-friendly**: Responsive design.
+- **Persistent state**: Game progress and settings are saved locally.
 
-The objective is to move the entire stack to another rod while following a strict set of rules.
+---
 
-## ⚖️ Rules of the Game
+## 🕹️ How to Play
 
-1. **Only one disk** can be moved at a time.
-2. Each move consists of taking the **upper disk** from one of the stacks and placing it on top of another stack or an empty rod.
-3. **No larger disk** may be placed on top of a smaller disk.
+1. **Enter your name** on the home page.
+2. **Choose disc count** (manual or spin for random).
+3. **Move discs** between towers (drag or click).
+4. **Win** by moving all discs to another tower in the fewest moves.
+5. **Check your rank** on the leaderboard!
 
-## ⛩️ The Legend
+### Rules
 
-The puzzle was invented by the French mathematician **Édouard Lucas** in 1883. It is associated with a legend of a temple containing a large room with three time-worn posts surrounded by 64 golden disks. The monks have been moving these disks in accordance with the rules of the puzzle. According to the legend, when the last move of the 64-disk puzzle is completed, the world will end.
+- Only one disc can be moved at a time.
+- No larger disc may be placed on a smaller one.
 
-## 🤖 The Algorithm
+---
 
-This project uses a **Recursive Algorithm** to solve the puzzle. The logic follows these three steps:
+## 🏆 Leaderboard
 
-1. Move  disks from the **Source** to the **Auxiliary** rod.
-2. Move the remaining  disk from the **Source** to the **Destination** rod.
-3. Move the  disks from the **Auxiliary** rod to the **Destination** rod.
+- Results are submitted online and ranked by:
+	- Number of moves (ascending)
+	- Time (ascending)
+- Filter leaderboard by disc count for fair comparison.
 
-### Mathematical Formula
+---
 
-The minimum number of moves required to solve a Tower of Hanoi puzzle with n disks is: **2<sup>n</sup> - 1**
+## 🤖 Auto Solve
 
+- Use the "Auto Solve" button for a 5-move hint from your current state.
+- Only available once per game.
 
-## 🚀 Installation & Usage
+---
 
-- This game does not need any installation.
-- To play the game, go through this site: https://hanoitower-ten.vercel.app/
+## 🌗 Dark/White Mode
 
+- Click the toggle button (top right) to switch between dark and white (light) themes.
+- Your preference is saved for next time.
 
+---
 
-## 📊 Complexity
+## 🚀 Getting Started
 
-* **Time Complexity:** O(2<sup>n</sup>)
-* **Space Complexity:** O(n) (due to the recursive call stack)
+No installation needed!  
+Just open `index.html` in your browser, or visit the deployed site:
+
+> https://hanoitower-ten.vercel.app/
+
+---
+
+## 📂 Project Structure
+
+- `hanoitower/index.html` — Home, disc selection, leaderboard
+- `hanoitower/game.html` — Main game interface
+- `hanoitower/game.js` — Game logic, drag & drop, auto solve, leaderboard submit
+- `hanoitower/spin.html` — Spinning wheel for random disc selection
+- `hanoitower/spin.js` — Wheel logic
+- `hanoitower/style.css` — All styles, including dark/white mode
+
+---
+
+## 💡 Development Ideas
+
+- Add user accounts and personal stats
+- More game modes (timed, challenge, etc.)
+- Achievements and unlockable themes
+- Multiplayer or versus mode
+- Educational step-by-step solver
+
+---
+
+## 📜 License
+
+MIT License
 
 ---
