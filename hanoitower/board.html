@@ -7,6 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+                    .delete-btn {
+                        background: #ff5252;
+                        color: #fff;
+                        border: none;
+                        border-radius: 8px;
+                        padding: 0.4em 1em;
+                        font-size: 1em;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: background 0.2s;
+                    }
+                    .delete-btn:hover {
+                        background: #c62828;
+                    }
             .result-win { color: #1ecb4f; font-weight: 700; }
             .result-lose { color: #ff5252; font-weight: 700; }
         body { background: linear-gradient(135deg, #232526 0%, #414345 100%); color: #f1f1f1; font-family: 'Be Vietnam Pro', sans-serif; }
@@ -88,14 +102,34 @@
                         const timeB = b['Thời gian chơi'] ? b['Thời gian chơi'].split(':').reduce((m,s,i)=>m*60+parseInt(s),0) : 9999;
                         return timeA - timeB;
                     });
-                    let html = '<table class="leaderboard-table"><thead><tr><th>Hạng</th><th>Tên</th><th>Số đĩa</th><th>Số bước</th><th>Thời gian</th><th>Kết quả</th></tr></thead><tbody>';
+                    let html = '<table class="leaderboard-table"><thead><tr><th>Hạng</th><th>Tên</th><th>Số đĩa</th><th>Số bước</th><th>Thời gian</th><th>Kết quả</th><th>Xoá</th></tr></thead><tbody>';
                     valid.forEach((row, i) => {
                         let result = row['Kết quả?']||'';
                         let resultClass = result === 'Thắng' ? 'result-win' : (result === 'Thua' ? 'result-lose' : '');
-                        html += `<tr><td>${i+1}</td><td>${row['Tên người chơi?']||''}</td><td>${row['Số đĩa?']||row['Số đĩa']||''}</td><td>${row['Số bước di chuyển']||''}</td><td>${row['Thời gian chơi']||''}</td><td class="${resultClass}">${result}</td></tr>`;
+                        html += `<tr><td>${i+1}</td><td>${row['Tên người chơi?']||''}</td><td>${row['Số đĩa?']||row['Số đĩa']||''}</td><td>${row['Số bước di chuyển']||''}</td><td>${row['Thời gian chơi']||''}</td><td class="${resultClass}">${result}</td><td><button class='delete-btn' onclick='deleteRow(${i+2})'>Xoá</button></td></tr>`;
+                        // i+2 vì dòng 1 là header, dữ liệu bắt đầu từ dòng 2
                     });
                     html += '</tbody></table>';
                     leaderboardTable.innerHTML = html;
+                        // Hàm xoá dòng, gọi backend
+                        function deleteRow(rowIndex) {
+                            if (!confirm('Bạn có chắc chắn muốn xoá kết quả này không?')) return;
+                            fetch('http://localhost:3000/delete-row', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ rowIndex })
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert('Đã xoá thành công!');
+                                    updateFullLeaderboard();
+                                } else {
+                                    alert('Lỗi xoá: ' + (data.error || 'Không xác định'));
+                                }
+                            })
+                            .catch(() => alert('Không thể kết nối server xoá!'));
+                        }
                 })
                 .catch(() => {
                     leaderboardTable.innerHTML = '<i>Lỗi tải dữ liệu bảng xếp hạng</i>';
