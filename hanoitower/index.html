@@ -47,7 +47,7 @@
             </div>
 
 
-            <input type="text" name="player" placeholder="Bạn tên gì?" required />
+            <input type="text" name="player" placeholder="Bạn tên gì?" required id="player-name-input" />
 
             <div class="choose-mode-row">
                 <label><input type="radio" name="choose_mode" value="manual" checked> Tự chọn số đĩa</label>
@@ -118,12 +118,14 @@
             const spinBlock = document.getElementById('spin-select-block');
             const discsSelect = document.getElementById('discs');
             const startBtn = document.getElementById('start-btn');
+            const playerNameInput = document.getElementById('player-name-input');
             radios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     if (this.value === 'manual') {
                         manualBlock.style.display = '';
                         spinBlock.style.display = 'none';
                         startBtn.style.display = '';
+                        playerNameInput.style.display = '';
                         // Mở khoá select nếu bị disabled và xóa lockSelection
                         if (discsSelect.disabled) discsSelect.disabled = false;
                         localStorage.removeItem('lockSelection');
@@ -131,6 +133,7 @@
                         manualBlock.style.display = 'none';
                         spinBlock.style.display = '';
                         startBtn.style.display = 'none';
+                        playerNameInput.style.display = 'none';
                     }
                 });
             });
