@@ -61,7 +61,7 @@ A modern, interactive web version of the classic Tower of Hanoi puzzle. Play, co
 No installation needed!  
 Visit the deployed site to play the game:
 
-> https://hanoitower-ten.vercel.app/
+> https://hanoitower-woody.vercel.app/
 
 ---
 
