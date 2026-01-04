@@ -69,7 +69,7 @@
                 <a href="spin.html" class="spin-btn-in-form">🎡 Quay vòng quay chọn số đĩa</a>
             </div>
 
-            <button type="submit">Bắt đầu chơi</button>
+            <button type="submit" id="start-btn">Bắt đầu chơi</button>
         </form>
     </div>
 
@@ -104,9 +104,9 @@
                         const playerForm = document.getElementById('player-form');
                         playerForm.addEventListener('submit', function(e) {
                             const mode = document.querySelector('input[name="choose_mode"]:checked').value;
+                            const playerName = playerForm.player.value;
+                            localStorage.setItem('playerName', playerName);
                             if (mode === 'spin') {
-                                const playerName = playerForm.player.value;
-                                localStorage.setItem('playerName', playerName);
                                 // Chuyển sang spin.html, không submit form
                                 e.preventDefault();
                                 window.location.href = 'spin.html';
@@ -117,20 +117,27 @@
             const manualBlock = document.getElementById('manual-select-block');
             const spinBlock = document.getElementById('spin-select-block');
             const discsSelect = document.getElementById('discs');
+            const startBtn = document.getElementById('start-btn');
             radios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     if (this.value === 'manual') {
                         manualBlock.style.display = '';
                         spinBlock.style.display = 'none';
+                        startBtn.style.display = '';
                         // Mở khoá select nếu bị disabled và xóa lockSelection
                         if (discsSelect.disabled) discsSelect.disabled = false;
                         localStorage.removeItem('lockSelection');
                     } else {
                         manualBlock.style.display = 'none';
                         spinBlock.style.display = '';
+                        startBtn.style.display = 'none';
                     }
                 });
             });
+            // Khởi tạo trạng thái nút khi load lại trang
+            if (document.querySelector('input[name="choose_mode"]:checked').value === 'spin') {
+                startBtn.style.display = 'none';
+            }
 
             // Kiểm tra nếu có kết quả quay từ trang spin
             const selectedDiscs = localStorage.getItem('selectedDiscs');

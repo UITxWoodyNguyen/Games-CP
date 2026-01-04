@@ -76,11 +76,18 @@
 
         <script defer src="spin.js"></script>
         <script>
-        // Hiển thị tên player ở góc phải trên màn hình spin
-        const playerSpinName = localStorage.getItem('playerName');
-        if (playerSpinName) {
-            document.getElementById('player-spin-name').textContent = '👤 ' + playerSpinName;
+        // Hiển thị tên player ở góc phải trên màn hình spin, luôn lấy từ localStorage
+        function showSpinPlayerName() {
+            const playerSpinName = localStorage.getItem('playerName');
+            if (playerSpinName) {
+                document.getElementById('player-spin-name').textContent = '👤 ' + playerSpinName;
+            } else {
+                document.getElementById('player-spin-name').textContent = '';
+            }
         }
+        document.addEventListener('DOMContentLoaded', showSpinPlayerName);
+        // Nếu user reload trang vẫn giữ tên
+        setTimeout(showSpinPlayerName, 200);
         </script>
 </body>
 
