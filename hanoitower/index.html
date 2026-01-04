@@ -29,9 +29,13 @@
                     <option value="7">7 đĩa</option>
                     <option value="8">8 đĩa</option>
                 </select>
+                <button id="refresh-leaderboard-btn" type="button" style="margin-left:1em;padding:0.3em 1em;font-size:1em;">🔄 Cập nhật BXH</button>
             </div>
             <div class="leaderboard-table-wrapper">
                 <div id="leaderboard-table">Đang tải...</div>
+            </div>
+            <div style="margin-top:1em;">
+                <a href="board.html" style="display:inline-block;padding:0.5em 1.2em;background:#4a6bff;color:#fff;border-radius:12px;font-weight:600;text-decoration:none;box-shadow:0 2px 8px #0001;transition:background 0.2s;">Xem toàn bộ BXH →</a>
             </div>
         </div>
 
@@ -160,12 +164,13 @@
                 discsSelect.disabled = true;
             }
 
-            // Hàm cập nhật bảng xếp hạng
+            // Hàm cập nhật bảng xếp hạng (fix: luôn lấy dữ liệu mới nhất, không cache, và có thể gọi thủ công)
             function updateLeaderboard() {
                 const leaderboardTable = document.getElementById('leaderboard-table');
                 const filterDiscs = document.getElementById('filter-discs');
                 const selectedDiscs = filterDiscs ? filterDiscs.value : 'all';
-                fetch('https://opensheet.elk.sh/1c3Zy0gG_0Vg_7FofCh0zXMZgzPZI2SczvNBjlflVG7w/Form%20Responses%201')
+                leaderboardTable.innerHTML = '<span style="color:#888">Đang tải dữ liệu...</span>';
+                fetch('https://opensheet.elk.sh/1c3Zy0gG_0Vg_7FofCh0zXMZgzPZI2SczvNBjlflVG7w/Form%20Responses%201', { cache: 'no-store' })
                     .then(res => res.json())
                     .then(data => {
                         // Lọc các bản ghi hợp lệ
@@ -212,8 +217,13 @@
                 filterDiscs.addEventListener('change', updateLeaderboard);
             }
 
+            // Nút cập nhật BXH thủ công
+            const refreshBtn = document.getElementById('refresh-leaderboard-btn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', updateLeaderboard);
+            }
             updateLeaderboard();
-            setInterval(updateLeaderboard, 5000); // Cập nhật mỗi 5 giây
+            setInterval(updateLeaderboard, 10000); // Cập nhật tự động mỗi 10 giây
         });
     </script>
 </body>
