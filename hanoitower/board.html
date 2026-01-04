@@ -81,6 +81,7 @@
         <div class="back-btn"><a href="index.html">← Quay về trang chủ</a></div>
     </div>
     <script>
+        let lastData = [];
         function updateFullLeaderboard() {
             const leaderboardTable = document.getElementById('leaderboard-table');
             leaderboardTable.innerHTML = '<span style="color:#888">Đang tải dữ liệu...</span>';
@@ -89,6 +90,7 @@
                 .then(data => {
                     // Lọc các bản ghi hợp lệ
                     let valid = data.filter(row => row['Tên người chơi?'] && row['Số bước di chuyển']);
+                    lastData = valid;
                     if (valid.length === 0) {
                         leaderboardTable.innerHTML = '<i>Chưa có dữ liệu</i>';
                         return;
@@ -106,34 +108,46 @@
                     valid.forEach((row, i) => {
                         let result = row['Kết quả?']||'';
                         let resultClass = result === 'Thắng' ? 'result-win' : (result === 'Thua' ? 'result-lose' : '');
-                        html += `<tr><td>${i+1}</td><td>${row['Tên người chơi?']||''}</td><td>${row['Số đĩa?']||row['Số đĩa']||''}</td><td>${row['Số bước di chuyển']||''}</td><td>${row['Thời gian chơi']||''}</td><td class="${resultClass}">${result}</td><td><button class='delete-btn' onclick='deleteRow(${i+2})'>Xoá</button></td></tr>`;
+                        html += `<tr id="row-${i+2}"><td>${i+1}</td><td>${row['Tên người chơi?']||''}</td><td>${row['Số đĩa?']||row['Số đĩa']||''}</td><td>${row['Số bước di chuyển']||''}</td><td>${row['Thời gian chơi']||''}</td><td class="${resultClass}">${result}</td><td><button class='delete-btn' onclick='deleteRow(${i+2})'>Xoá</button></td></tr>`;
                         // i+2 vì dòng 1 là header, dữ liệu bắt đầu từ dòng 2
                     });
                     html += '</tbody></table>';
                     leaderboardTable.innerHTML = html;
-                        // Hàm xoá dòng, gọi backend
-                        function deleteRow(rowIndex) {
-                            if (!confirm('Bạn có chắc chắn muốn xoá kết quả này không?')) return;
-                            fetch('http://localhost:3000/delete-row', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ rowIndex })
-                            })
-                            .then(res => res.json())
-                            .then(data => {
-                                if (data.success) {
-                                    alert('Đã xoá thành công!');
-                                    updateFullLeaderboard();
-                                } else {
-                                    alert('Lỗi xoá: ' + (data.error || 'Không xác định'));
-                                }
-                            })
-                            .catch(() => alert('Không thể kết nối server xoá!'));
-                        }
                 })
                 .catch(() => {
                     leaderboardTable.innerHTML = '<i>Lỗi tải dữ liệu bảng xếp hạng</i>';
                 });
+        }
+
+        // Hàm xoá dòng, gọi backend và ẩn khỏi bảng ngay lập tức
+        function deleteRow(rowIndex) {
+            const rowEl = document.getElementById('row-' + rowIndex);
+            const rowData = lastData[rowIndex-2];
+            let msg = 'Bạn có chắc chắn muốn xoá kết quả này không?\n';
+            if (rowData) {
+                msg += `\nTên: ${rowData['Tên người chơi?']||''}\nSố đĩa: ${rowData['Số đĩa?']||rowData['Số đĩa']||''}\nSố bước: ${rowData['Số bước di chuyển']||''}\nThời gian: ${rowData['Thời gian chơi']||''}`;
+            }
+            if (!window.confirm(msg)) return;
+            // Ẩn dòng khỏi bảng ngay lập tức
+            if (rowEl) rowEl.style.display = 'none';
+            fetch('http://localhost:3000/delete-row', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rowIndex })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setTimeout(updateFullLeaderboard, 1000);
+                } else {
+                    alert('Lỗi xoá: ' + (data.error || 'Không xác định'));
+                    if (rowEl) rowEl.style.display = '';
+                }
+            })
+            .catch(() => {
+                alert('Không thể kết nối server xoá!');
+                if (rowEl) rowEl.style.display = '';
+            });
         }
         updateFullLeaderboard();
     </script>
