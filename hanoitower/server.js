@@ -10,7 +10,7 @@ const SHEET_NAME = 'Form Responses 1'; // hoặc tên sheet bạn dùng
 
 // Load credentials từ file JSON tải về
 const auth = new google.auth.GoogleAuth({
-  keyFile: 'D:\\Project\\hntower-2712aa06687d.json',
+  keyFile: 'D:\\Project\\Games-CP-main\\Games-CP-main\\hanoitower\\hntower-619e4f2b4160.json',
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 const sheets = google.sheets({ version: 'v4', auth });
