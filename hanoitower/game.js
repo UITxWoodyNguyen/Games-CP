@@ -72,15 +72,18 @@ function endGame(won) {
     message.textContent = "😢 Chúc bạn may mắn lần sau";
   }
 
-  // Gửi dữ liệu đến Google Form
+
+  // Gửi dữ liệu đến Google Form, chỉ gửi nếu playerName khác 'Không rõ'
   const playerName = document.getElementById('player-name').textContent;
-  submitToGoogleForm(
-    playerName,
-    discCount,
-    moveCount,
-    formattedTime,
-    won ? "Thắng" : "Thua"
-  );
+  if (playerName !== 'Không rõ') {
+    submitToGoogleForm(
+      playerName,
+      discCount,
+      moveCount,
+      formattedTime,
+      won ? "Thắng" : "Thua"
+    );
+  }
 
   // Nếu thắng, sau 2-3s thì fetch lại bảng xếp hạng và hiển thị vị trí
   if (won) {
